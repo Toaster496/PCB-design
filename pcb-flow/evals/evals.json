@@ -1,0 +1,62 @@
+{
+  "skill_name": "pcb-flow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "i want to make a custom board for my robot project, it has 4 motor drivers an esp32 and some sensors, never done this before where do i even start",
+      "expected_output": "Agent runs/summarizes the requirements interview (function, power source and rails, mechanics/enclosure, environment, volume/cost, fab, EDA tool), writes down requirements before any schematic, and lays out the phase plan (requirements → architecture → schematic → review → BOM → board setup → placement → routing → fab package) with exit criteria per phase, pointing to the sibling skills at each phase.",
+      "files": [],
+      "assertions": [
+        "response asks or captures written requirements before suggesting schematic/layout work",
+        "response presents a phased plan with review gates or exit criteria",
+        "response names power rails / current budgeting as an early question",
+        "response mentions continuity/journal/backup as part of the flow"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I have gerbers already generated for my 2 layer board and a BOM in excel, am I ready to order? what should I check",
+      "expected_output": "Agent diagnoses the project at Phase 9 (fab package), runs the pre-release checks: gerber file presence (copper/mask/silk/paste/outline/drill), drill file format, layer count vs stackup, BOM has MPN+supplier PN and DNP flags, pos/CPL pairing, fab notes, visual review incl. 3D; recommends gerber_audit.py and a final backup checkpoint.",
+      "files": [],
+      "assertions": [
+        "response checks fab package completeness (gerbers, drill, outline, assembly files)",
+        "response checks BOM lines for MPN/supplier part numbers and DNP flags",
+        "response recommends or simulates an audit of the gerber set",
+        "response mentions a final backup/journal checkpoint before ordering"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "my schematic is done and ERC is clean, whats next",
+      "expected_output": "Agent advances from Phase 2/3 to BOM freeze and board setup: first a schematic review pass against the pitfalls checklist (symmetry audit for repeated channels, pull resistors, reset timing), then BOM normalization with MPNs and lifecycle check, then outline/stackup/design-rules entry before placement.",
+      "files": [],
+      "assertions": [
+        "response does not jump straight to routing or gerbers",
+        "response states ERC-clean is necessary but not sufficient (review still needed)",
+        "response sequences BOM freeze before or alongside board setup",
+        "response mentions entering design rules before placement"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "help me refactor my express server routes",
+      "expected_output": "No PCB skill triggers. The agent treats this as ordinary software work (near-miss: 'routes' here means web server routes, not PCB traces).",
+      "files": [],
+      "assertions": [
+        "response does not load or reference any pcb-* skill or PCB design guidance",
+        "response handles the Express.js request directly as a software task"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "can you look at this board and tell me what phase im in and what to do next? netlist and schematic are done, board has outline drawn and mounting holes placed but no parts yet",
+      "expected_output": "Agent diagnoses Phase 5 (board setup) in progress: outline exists, needs stackup decision + design rules entry (net classes, clearances, trace widths, vias) before placement, then placement per order-of-workflow.",
+      "files": [],
+      "assertions": [
+        "response identifies current phase as board setup / pre-placement",
+        "response says stackup and design rules should be locked before part placement",
+        "response does not recommend routing work yet"
+      ]
+    }
+  ]
+}

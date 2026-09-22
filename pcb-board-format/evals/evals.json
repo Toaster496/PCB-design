@@ -1,0 +1,72 @@
+{
+  "skill_name": "pcb-board-format",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "designing a board with a 480mbps usb device and a 100base-t phy, do i need more than 2 layers?",
+      "expected_output": "Agent recommends 4 layers (signal-speed driven: fast edges want adjacent reference planes for return current, impedance control, EMC margin), explains SIG-GND-PWR-SIG canonical arrangement and the physics reasoning, and notes 2-layer is workable only for slower signals with routing discipline.",
+      "files": [],
+      "assertions": [
+        "response recommends 4 layers for this speed class",
+        "response explains return-current/adjacent-plane reasoning, not just a rule",
+        "response mentions controlled impedance for the USB/ethernet pairs",
+        "response names the canonical 4-layer arrangement (signals outer, planes inner)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "my enclosure has 4 plastic standoffs at the corners, what size mounting holes do i drill and how much space around them",
+      "expected_output": "Agent gives M3 → 3.2 mm hole (or matches standoff screw size table: M2 2.2, M2.5 2.7), non-plated default, keepout ring guidance (hole + screw head/driver clearance, generic ~2-4 mm dia zone), notes plated-when-grounding-to-standoff option, and edge/copper clearance.",
+      "files": [],
+      "assertions": [
+        "response gives the screw-size-to-hole-diameter mapping",
+        "response states holes are non-plated by default with plated rationale",
+        "response gives a keepout/clearance distance around holes"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "ordering 300 copies of a 20x25mm sensor board for pick and place assembly, should i panelize and how",
+      "expected_output": "Agent says yes: small boards + machine assembly need a panel; recommends V-score if rectangular (with 0.5mm part keepout), rails ~5mm with tooling holes per assembler spec, 3 asymmetric global fiducials + local fiducials near fine-pitch parts, targets fab standard panel size, verify assembler specs.",
+      "files": [],
+      "assertions": [
+        "response recommends panelizing",
+        "response covers breakaway choice with keepout rationale",
+        "response includes rails/tooling holes and fiducial requirements",
+        "response tells user to verify assembler-specific specs rather than asserting one"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "whats better enig or hasl for my 0.4mm pitch qfn board thatll sit in storage for 8 months before assembly",
+      "expected_output": "Agent recommends ENIG: flat pad surface (fine pitch, no HASL dome), long shelf life vs OSP's short oxidation window; notes ENIG cost and the rare black-pad risk with reputable fabs; ties to the user's two stated constraints (fine pitch + storage delay).",
+      "files": [],
+      "assertions": [
+        "response recommends ENIG with reasoning tied to fine pitch and shelf life",
+        "response mentions HASL unevenness problem for fine pitch",
+        "response mentions OSP shelf-life limitation"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "how many layers for a boost converter pcb",
+      "expected_output": "Near-miss/nuance check: agent does not reflexively say 4; a power board can be 2-layer with proper ground pour and loop-area discipline; layer count is driven by control-signal speed/density/EMC more than raw current. Should ask/branch on what the converter controls and environment are.",
+      "files": [],
+      "assertions": [
+        "response does not automatically prescribe 4+ layers for a power board",
+        "response grounds layer choice in signal density/EMC not just current",
+        "response mentions loop area / hot loop discipline for the converter"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "how thick should the plywood panels be for a bookshelf im building, and do i need to route slots for the shelves",
+      "expected_output": "No PCB skill triggers - woodworking (thickness/slots/routing in a carpentry sense). Agent answers the furniture question directly.",
+      "files": [],
+      "assertions": [
+        "response does not apply PCB stackup/slot/clearance guidance to plywood furniture",
+        "response handles the request as woodworking"
+      ]
+    }
+  ]
+}

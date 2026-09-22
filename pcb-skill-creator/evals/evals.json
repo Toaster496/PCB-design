@@ -1,0 +1,60 @@
+{
+  "skill_name": "pcb-skill-creator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "i keep designing rigid flex boards and none of the existing skills cover bend regions and stiffeners properly, can we add that",
+      "expected_output": "Agent runs the creation workflow: captures intent (task/trigger/outputs/non-goals for pcb-flex-rigid), checks overlap with existing skills (board-format owns stackups generally; flex gets its own), drafts the skill per format contract with references on bend radius/copper, scripts/evals, validates with validate_suite.py, updates README + pcb-flow routing; asks user about edge cases (dynamic vs static flex, layer counts).",
+      "files": [],
+      "assertions": [
+        "response follows the create-new-skill decision (domain, not reference edit)",
+        "response captures intent/triggers/non-goals before drafting",
+        "response plans the standard structure (SKILL.md + references + evals)",
+        "response mentions validation and suite index updates"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "make a new pcb skill for battery management boards, we do a lot of bms work",
+      "expected_output": "Agent identifies BMS as a safety-critical domain: the skill must encode safety-chain logic (protection FETs, AFE, fusing, cell balancing) with mandatory human-review gates for charging paths, follow the format contract (pushy description with BMS trigger phrases, references for chemistry specifics, evals with near-miss negatives), and scope non-goals (no charging-parameter signoff without human review).",
+      "files": [],
+      "assertions": [
+        "response treats BMS as safety-critical requiring human review gates",
+        "response captures trigger phrases and non-goals per the workflow",
+        "response structures per the format contract (frontmatter/references/evals)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "the routing skill got my usb3 question wrong, it only talks about usb2 - should i just add a special case rule for usb3 to the eval?",
+      "expected_output": "Agent applies generalize-from-feedback: the root cause is missing USB3-specific guidance (SS lanes, 85/90 ohm per spec, TX/RX pair separation), not a missing eval case; fix = add the mechanism to the high-speed reference + evals covering both, not a one-off rule; re-check against different-board test.",
+      "files": [],
+      "assertions": [
+        "response rejects one-off special-case rule additions",
+        "response diagnoses the root-cause gap and fixes content + evals",
+        "response re-runs the full validation after the fix"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "turn my motor driver layout checklist from last project into a skill",
+      "expected_output": "Agent separates generalizable content (goes to skill: gate-loop physics, symmetric channels, shunt/Kelvin patterns — much already exists in pcb-layout/pcb-pitfalls, so MERGE/extend there) from project-specific items (specific MPN quirks, this board's mistakes → journal, never a skill); runs the one-domain test; only creates a new skill if a genuine domain gap remains.",
+      "files": [],
+      "assertions": [
+        "response splits generalizable vs project-specific content",
+        "response routes general lessons to existing skills where they exist",
+        "response does not create a new skill for one-board trivia"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "help me write a skill for my video editing workflow, i use davinci resolve and want the agent to follow my export preset conventions",
+      "expected_output": "No pcb-skill-creator trigger - a non-PCB skill request goes to a general skill-creator, not the PCB suite's extender. Agent either uses a generic skill-creation process or helps draft the video skill directly, without applying PCB suite format conventions as mandatory.",
+      "files": [],
+      "assertions": [
+        "response does not route the request through the pcb-skills suite or its format contract",
+        "response handles it as a generic/video-domain skill creation task"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "skill_name": "pcb-design-rules",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "will a 0.3mm trace handle 2 amps on the outside layer of my board",
+      "expected_output": "Agent consults the IPC-2152-based current table: 2 A external 1oz at 10C rise wants ~0.8 mm; 0.3 mm is roughly a 1 A-ish width; recommends widening to 0.8 mm or a pour, notes internal would need ~2x, and mentions the method (temperature rise, copper weight) not just a number.",
+      "files": [],
+      "assertions": [
+        "response says 0.3 mm is insufficient for 2 A external",
+        "response gives ~0.8 mm (or pour) as the fix",
+        "response cites IPC-2152 or the delta-T/copper-weight method",
+        "response notes internal-layer widths differ from external"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "how much spacing between traces do i need for 48V DC on an uncoated external layer",
+      "expected_output": "Agent walks the derivation: 48 V working voltage, IPC-2221-style table lands in the 31-50 V band (~0.6 mm conservative, 1.0 mm with margin), notes coated/internal allow less, suggests 2x prototype margin where space allows, mentions transient consideration if inductive loads are involved.",
+      "files": [],
+      "assertions": [
+        "response derives spacing from the working voltage band, not a guess",
+        "response cites IPC-2221 or IEC 62368-1 as the source",
+        "response distinguishes clearance vs creepage or coated vs uncoated",
+        "response encourages margin above the tabulated minimum"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "my vias are 0.25mm drill with 0.45mm pads, is that ok for a 1.6mm 4 layer jlc order",
+      "expected_output": "Agent checks: annular ring = (0.45-0.25)/2 = 0.1 mm — at/below the ~0.125-0.15 mm safe quick-turn default (advertised floor); aspect ratio 1.6/0.25 = 6.4:1 fine; recommends enlarging pads to 0.5+ mm (0.125+ ring) or 0.55 for margin, explains drill registration tolerance reasoning.",
+      "files": [],
+      "assertions": [
+        "response computes the annular ring from drill and pad",
+        "response flags the ring as too small with registration-tolerance reasoning",
+        "response checks or states the aspect ratio is fine"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "setting up net classes in kicad for a motor driver board, what classes do i actually need",
+      "expected_output": "Agent proposes a small class set: signal default, power low-current, motor/high-current (2A class with width guidance + pours), maybe gate-drive and sense classes; explains per-class width/clearance/via values and where to enter them (Board Setup -> Net Classes), suggests validating the rules CSV with check_rules.py first.",
+      "files": [],
+      "assertions": [
+        "response proposes classes matched to the board's net families",
+        "response assigns per-class widths/clearances with rationale",
+        "response mentions KiCad's net-class entry point or rules location",
+        "response ties at least one class to current-carrying sizing"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "whats the minimum trace width for 230 volts ac mains on a consumer adapter board",
+      "expected_output": "Agent treats this as safety-relevant: voltage sets CLEARANCE/creepage (not width); derives from IEC 62368-1-class tables with overvoltage category impulse (2.5 kV class for cat II), reinforced insulation likely needed for consumer product, requires qualified human review before fab; gives conservative creepage/clearance guidance and slot technique if tight, while flagging that the agent prepares but cannot sign off.",
+      "files": [],
+      "assertions": [
+        "response redirects from width to clearance/creepage as the governing rule",
+        "response mentions overvoltage category or impulse withstand reasoning",
+        "response requires/demands qualified human review for mains design",
+        "response offers conservative spacing numbers or a slot technique with provenance"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "building code says i need clearance around my fireplace hearth, how many feet of space is required",
+      "expected_output": "No PCB skill triggers - building/fireplace clearance regulation, not PCB creepage. Agent answers the home-renovation/building-code question directly (or advises checking local code).",
+      "files": [],
+      "assertions": [
+        "response does not apply PCB creepage/clearance tables to a fireplace",
+        "response handles the request as building code / home renovation"
+      ]
+    }
+  ]
+}

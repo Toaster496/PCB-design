@@ -1,0 +1,60 @@
+{
+  "skill_name": "pcb-bom",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "my jlc assembly order got rejected, they say my bom and pos files dont match, what does that mean",
+      "expected_output": "Agent explains the BOM/CPL/board designator-set pairing requirement: every designator in the CPL must appear in the BOM (or be DNP-flagged), footprints must match the board, DNP rows kept rather than deleted; guides reconciliation: generate BOM from schematic, CPL from board, diff designator sets, fix one source, re-export both; suggests bom_lint.py to validate.",
+      "files": [],
+      "assertions": [
+        "response explains designator-set mismatch between BOM and centroid/CPL files",
+        "response prescribes reconciling from the two sources (schematic BOM, board positions)",
+        "response mentions DNP rows should be flagged not deleted",
+        "response recommends a lint/validation step before re-submitting"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "is it fine to use 0402 10uf caps on my 3v3 rail, trying to keep the board small",
+      "expected_output": "Agent flags the DC-bias problem: class-2 ceramics lose effective capacitance under bias, a 0402 10uF at 3.3V might still be reasonable but at 12V would collapse (typical vendor curve example: 10u 0402 X5R at 12V ~ 3u effective); suggests checking the vendor DC-bias curve, size for effective capacitance, or stepping up to 0603/0805; notes quantity of decaps matters more than single-part headline value.",
+      "files": [],
+      "assertions": [
+        "response explains DC-bias effective capacitance loss with a concrete example",
+        "response recommends checking vendor DC-bias curves or using larger case",
+        "response does not just assert yes or no without the mechanism"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "checking my parts before i freeze the bom, half of these are marked NRND on mouser, does that matter for a hobby build",
+      "expected_output": "Agent explains lifecycle semantics (Active/NRND/EOL): for a one-off hobby build NRND matters little today but means the part (and the design) dies on the next reorder; for any production or repeated build it is a scheduled redesign; advises checking date of status, recording it in BOM notes, and finding active alternates for at least single-source NRND parts.",
+      "files": [],
+      "assertions": [
+        "response explains NRND meaning and its different weight for hobby vs production",
+        "response advises recording status + date in the BOM",
+        "response suggests alternates for single-source or NRND parts"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "got a bunch of values in my bom like 4k99 5k1 5k23 resistors all 0603, feels excessive",
+      "expected_output": "Agent confirms consolidation instinct: E24 for routine pullups/dividers (4.7k, 5.1k), E96 only where the circuit math genuinely needs precision; each distinct value is a separate reel/line/stock mistake; suggests value-merge pass and reports via bom_lint consolidation warning.",
+      "files": [],
+      "assertions": [
+        "response validates consolidation with E24/E96 reasoning",
+        "response explains the inventory/assembly cost of distinct values",
+        "response mentions a concrete tool or pass to do the merge"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "im writing a bill of materials for my new kitchen cabinets, help me cost the plywood",
+      "expected_output": "No PCB skill triggers — physical woodworking BOM, not electronic. Agent answers the woodworking question directly.",
+      "files": [],
+      "assertions": [
+        "response does not apply PCB BOM skill guidance to cabinet making",
+        "response handles the request as woodworking/costing"
+      ]
+    }
+  ]
+}

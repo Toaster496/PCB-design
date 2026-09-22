@@ -1,0 +1,59 @@
+{
+  "skill_name": "pcb-layout",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "im placing parts on my stm32 board and the ratsnest looks like spaghetti, every net crosses everything, is that normal",
+      "expected_output": "Agent treats placement as the problem (not routing): flow-based zoning, placement order (mechanicals → anchors → decoupling → TPs), iterate placement with ratsnest as objective, big crossing bundles = move parts now. Offers zone map method.",
+      "files": [],
+      "assertions": [
+        "response says fix placement before trying to route",
+        "response explains flow-based zoning or placement passes",
+        "response frames ratsnest crossings as placement feedback to iterate on"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "does it actually matter if my decoupling caps are 5mm from the mcu pins? board is getting tight",
+      "expected_output": "Agent explains loop inductance physics: ~1 nH/mm rule of thumb, cap impedance dominated by loop not capacitance above ~10 MHz, 5 mm detour + vias defeats the cap exactly where needed; closer beats bigger; suggests opposite-side placement under IC or clearing space by moving other parts; bulk caps lenient.",
+      "files": [],
+      "assertions": [
+        "response explains loop inductance / frequency-domain reasoning, not a bare rule",
+        "response gives a concrete distance target (~1-2 mm class)",
+        "response offers a practical alternative (opposite side placement or space clearing)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "wheres the right place for esd protection diodes on my usb port, near the chip or near the connector",
+      "expected_output": "Agent: at the connector, within mm of entry pads — surge current must take the shortest path to ground before radiating/coupling into interior nets; clamps at the IC protect nothing.",
+      "files": [],
+      "assertions": [
+        "response says connector side, not IC side",
+        "response explains the surge-current/antenna reasoning",
+        "response mentions short path to chassis/board ground"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "putting an esp32 module on the board, do i need a keepout under the antenna part",
+      "expected_output": "Agent: yes — keepout on all copper layers under/around the antenna section extending beyond module edge, no pour/traces/components; module at board edge, antenna pointing off-board; notes batteries/cables/metal also detune.",
+      "files": [],
+      "assertions": [
+        "response requires keepout on ALL copper layers",
+        "response says keepout extends beyond the antenna region (past module edge)",
+        "response advises module/antenna at board edge"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "layout my city garden plots",
+      "expected_output": "No PCB skill triggers — physical garden layout, not PCB component placement. Agent answers the gardening question directly.",
+      "files": [],
+      "assertions": [
+        "response does not apply PCB placement guidance to the garden",
+        "response handles the request as gardening/land use"
+      ]
+    }
+  ]
+}

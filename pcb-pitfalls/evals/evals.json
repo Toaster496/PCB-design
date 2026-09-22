@@ -1,0 +1,73 @@
+{
+  "skill_name": "pcb-pitfalls",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "board keeps resetting whenever the motor spins, works fine otherwise, any ideas",
+      "expected_output": "Agent symptom-hunts the catalog: motor-induced reset points to (a) shared power rail without star/decoupling separation (motor inrush dips rail), (b) hot-loop radiated coupling into reset/EN trace, (c) ground return path shared between motor current and logic (ground bounce), (d) missing bulk capacitance. Asks layout questions to discriminate and gives concrete fixes per cause.",
+      "files": [],
+      "assertions": [
+        "response names multiple plausible root causes with mechanisms (rail dip, ground bounce, radiated coupling)",
+        "response asks discriminating questions or gives a debug procedure",
+        "response offers concrete layout/decoupling fixes, not generic advice"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "about to send gerbers to jlc, anything i should check first",
+      "expected_output": "Agent runs the pre-fab-release checklist: gerber_audit.py on the package (file classes present, drill format, layer count vs claim, empty user layers), netlist-vs-board diff, pos/BOM designator reconciliation, fab notes complete, capability re-verify, 3D pass, bring-up notes BEFORE ordering, final verified backup.",
+      "files": [],
+      "assertions": [
+        "response recommends running the gerber audit script or enumerates the same file-class checks",
+        "response includes BOM/CPL reconciliation",
+        "response includes bring-up notes or backup verification as a pre-order step",
+        "response suggests re-checking fab capability for tightest features"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "first usb-c board, someone said something about pull down resistors i need?",
+      "expected_output": "Agent identifies the CC line requirement: as a device/UFP you need 5.1k (Rd) pull-downs on BOTH CC1 and CC2, otherwise sources won't provide VBUS beyond default current; cites the USB Type-C spec role; warns the classic mistake of one resistor on a single CC line only.",
+      "files": [],
+      "assertions": [
+        "response identifies 5.1k on CC1 AND CC2 as the requirement",
+        "response explains the UFP role mechanism (source won't supply without Rd)",
+        "response warns about the single-CC-line mistake"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "review my 4 layer ethernet switch design, specifically emc since its going for ce testing",
+      "expected_output": "Agent runs an EMC-focused review from the catalog: return path/split audit, port ESD/filter placement at connectors, CM chokes + Bob-Smith on ethernet, shield-can stitching, crystal routing, cable common-mode treatment, stitching vias density, plane edge distances; escalates for human EMC review pre-certification since first-pass CE failures are schedule-killers.",
+      "files": [],
+      "assertions": [
+        "response checks ESD/filter at connector entries",
+        "response checks return-path integrity/plane splits for the high-speed nets",
+        "response covers cable common-mode treatment (chokes/shield termination)",
+        "response recommends human/pre-cert review escalation"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "what are common mistakes when adding an esp32 module to an existing board",
+      "expected_output": "Agent hits the module-integration pitfalls: borrowed-footprint pinout verification (sibling families share packages, differ in pin maps - verify pad-by-pad), antenna keepout on all layers extending past module, USB CC termination if adding USB-C, EN/RC reset timing vs rail ramp, boot strap pullups, decap close to module pins, radio module mechanicals (overhang), and purging replaced connector tracks if replacing an old header.",
+      "files": [],
+      "assertions": [
+        "response mentions footprint pinout verification against the datasheet",
+        "response mentions antenna keepout discipline",
+        "response covers EN/reset timing or boot straps",
+        "response mentions replacing/purging orphaned tracks if this replaces an old header"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "what are the most common pitfalls assembling ikea furniture, doing a malm dresser this weekend",
+      "expected_output": "No PCB skill triggers - furniture assembly, not PCB. Agent answers the IKEA assembly question directly.",
+      "files": [],
+      "assertions": [
+        "response does not apply PCB assembly pitfalls to furniture",
+        "response handles the request as furniture assembly advice"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+net_class,clearance_mm,min_width_mm,default_width_mm,max_width_mm,via_drill_mm,via_pad_mm,max_current_A,notes
+signal,0.2,0.2,0.25,0.5,0.3,0.6,0.5,default logic nets
+power_1A,0.2,0.3,0.4,0.8,0.3,0.6,1.0,1 A rails e.g. 3V3 loads
+power_2A,0.2,0.6,0.8,1.2,0.4,0.8,2.0,2 A rails motor supplies
+power_5A,0.3,1.5,2.5,6.0,0.5,0.9,5.0,use pours where possible
+hs_diff_90,0.2,0.15,0.19,0.3,0.3,0.55,,USB2 pair - width/gap per fab impedance sheet
+rf_50,0.5,0.3,0.35,0.6,0.3,0.6,,single-ended RF per calc
+hv_250,3.0,0.3,0.5,1.0,0.4,0.8,,transient-sized clearance see derivation

@@ -1,0 +1,61 @@
+{
+  "skill_name": "pcb-project-continuity",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "ive been working on this kicad project across sessions and just lost my whole vm, how do i never lose it again",
+      "expected_output": "Agent sets up the continuity system: PROJECT_JOURNAL.md from template (snapshot, todo with acceptance criteria, decision log, resume playbook), checkpoint policy at phase gates + before destructive ops, encrypted off-box backups via backup.py with split key policy (key on a different host), BACKUPS.md ledger with expiry notes, dual-track journal copy to a paste host; explains why encryption is default (public hosts = possession of URL is access).",
+      "files": [],
+      "assertions": [
+        "response sets up a journal with a resume playbook section",
+        "response mandates encrypted uploads with key separation",
+        "response explains hosts are public so plaintext is a breach",
+        "response defines checkpoint triggers (phase gates / destructive ops / timed)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "fresh session, i have a backup url and a key file url from last week, how do i get my project back",
+      "expected_output": "Agent runs the resume playbook: download archive + key from their hosts, verify sha256 vs the manifest, decrypt with the recorded method (openssl/gpg/age command provided), unpack, read PROJECT_JOURNAL.md first, follow its resume playbook, verify phase exit criteria before continuing, checkpoint after any destructive step.",
+      "files": [],
+      "assertions": [
+        "response verifies checksums before decrypting",
+        "response gives concrete decrypt commands per method",
+        "response reads the journal first after unpacking",
+        "response schedules the next checkpoint after resuming"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "is it actually necessary to encrypt the backups? its just my hobby board, no client stuff",
+      "expected_output": "Agent explains the threat model honestly: hosts are public and link-addressable, URL leak = full project exposure (design files, maybe credentials in configs), encryption costs one extra file upload with the split policy so default-on is nearly free; acknowledges hobby risk tolerance is the user's call (that's why --allow-plaintext exists as an explicit override, not a default), and notes the journal/BACKUPS.md should never be uploaded plaintext regardless.",
+      "files": [],
+      "assertions": [
+        "response explains the public-host threat model",
+        "response notes the split policy makes encryption nearly free of hassle",
+        "response respects user autonomy (explicit override exists) while defaulting to encryption"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "my filebin link from two weeks ago says bin does not exist, did i lose everything",
+      "expected_output": "Agent applies the expiry ledger logic: filebin bins die from inactivity; check BACKUPS.md for other copies (critical releases were dual-hosted), check the dual-track journal copy for the recovery map, walk the manifest for the newest live entry, re-verify remaining links, re-upload to restore redundancy, and fix the process going forward (expiry notes + scheduled re-uploads at phase gates for inactivity-expiring hosts).",
+      "files": [],
+      "assertions": [
+        "response checks for redundant copies on other hosts / the manifest",
+        "response explains inactivity-based expiry semantics",
+        "response prescribes re-upload cadence to prevent recurrence"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "back up my postgres database to s3 nightly",
+      "expected_output": "No PCB skill triggers — database backup to cloud storage is a different domain (no design project, no phase gates, no public-file-host threat model). Agent answers as a general sysadmin task; the continuity skill's concepts (encryption, verification, ledger) may be mentioned as analogous good practice but the PCB skill is not applied.",
+      "files": [],
+      "assertions": [
+        "response does not run the pcb-project-continuity workflow",
+        "response handles it as a database/ops task"
+      ]
+    }
+  ]
+}

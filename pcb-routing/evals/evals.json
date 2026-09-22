@@ -1,0 +1,62 @@
+{
+  "skill_name": "pcb-routing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "im laying out a 4 layer stm32 board with usb-c, the diff pair keeps throwing drc errors when i try to length match, what am i doing wrong",
+      "expected_output": "Agent diagnoses common diff-pair length-matching DRC causes: serpentine amplitude/pitch too tight (coupling), width changes entering tuning, gap changes, pair splitting around obstacles; explains intra-pair skew vs inter-pair length budget (derive from protocol, USB2 skew is small but the bit rate is 480 Mbps class), recommends keeping pair geometry constant, tuning with the length-tuning tool settings, matching at source end, not splitting the pair across plane gaps or layer transitions without return vias.",
+      "files": [],
+      "assertions": [
+        "response addresses serpentine amplitude/spacing as a DRC trigger",
+        "response distinguishes intra-pair skew from the protocol timing budget",
+        "response warns against geometry changes or splitting the pair across gaps",
+        "response offers tool-level fixes (tuning tool settings) not just theory"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "should i split the analog and digital ground planes on my adc board",
+      "expected_output": "Agent explains return-current physics: single solid plane with disciplined routing usually beats splits; splits only when a specific datasheet demands it; nothing may cross a split; if crossing needed, bridge with capacitor; the real fix is placement/routing discipline of noisy vs quiet nets, plus a star-return for the sensitive cluster if truly needed.",
+      "files": [],
+      "assertions": [
+        "response explains why return current follows the trace and dislikes splits",
+        "response recommends solid plane + routing discipline as default",
+        "response names the exception (datasheet demands) and the bridge rule",
+        "response does not parrot split-plane dogma"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "routing a 12v to 3.3v buck at 2 amps on 2 layers, how should the power routing go",
+      "expected_output": "Agent names the hot loops (input cap + switches + return; output loop), tells user to place for minimal loop area, route SW node short with thermal-appropriate copper but not wide pours, pours for the 2A output with solid plane underneath, Kelvin feedback sense away from SW node, decoupling loop physics, stitching vias for the ground return path, then DRC + refill zones.",
+      "files": [],
+      "assertions": [
+        "response names the input/output hot loops and demands small loop area",
+        "response addresses SW node copper sizing (not a giant pour)",
+        "response covers ground return/pour/stitching for the converter region",
+        "response mentions feedback/Kelvin sense routing away from the switch node"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "how close can i run two traces next to each other before crosstalk is a problem",
+      "expected_output": "Agent gives the 3W rule as the workable heuristic (spacing >= 3x width center-to-center for parallel runs), explains the mechanism (field coupling, reference-plane proximity dominates), notes parallel length matters, recommends perpendicular crossing or reference plane integrity for the critical nets.",
+      "files": [],
+      "assertions": [
+        "response gives the 3W rule with explanation",
+        "response mentions reference plane as the bigger lever than trace spacing",
+        "response ties risk to parallel run length, not just gap"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "help me route my model railway wiring bus",
+      "expected_output": "No PCB skill triggers (physical model-railway power bus wiring, not PCB traces). Agent answers as a hobby wiring question; may note the analogous concepts but does not apply PCB skill content.",
+      "files": [],
+      "assertions": [
+        "response does not apply PCB routing skill guidance to model railway wiring",
+        "response handles the request as hobby/model wiring"
+      ]
+    }
+  ]
+}
